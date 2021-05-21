@@ -13,6 +13,7 @@ struct ContentView: View {
 
     @State private var opponentMove = GameMove.allCases.randomElement()!
     @State private var shouldWin = Bool.random()
+    @State private var shuffledMoves = GameMove.allCases.shuffled()
 
     var promptText: String {
         "Choose the \(shouldWin ? "winning" : "losing") move:"
@@ -40,21 +41,14 @@ struct ContentView: View {
                 VStack(spacing: 8) {
                     Text(promptText)
                         .font(.headline)
+
                     HStack(spacing: 8) {
-                        Button(action: {
-                            score += 1
-                        }) {
-                            HandIcon(move: .rock)
-                        }
-                        Button(action: {
-                            score += 1
-                        }) {
-                            HandIcon(move: .paper)
-                        }
-                        Button(action: {
-                            score += 1
-                        }) {
-                            HandIcon(move: .scissors)
+                        ForEach(shuffledMoves) { move in
+                            Button(action: {
+                                score += 1
+                            }) {
+                                HandIcon(move: move)
+                            }
                         }
                     }
                     .font(.system(size: 64))
@@ -74,10 +68,12 @@ struct ContentView: View {
     }
 }
 
-enum GameMove: String, CaseIterable {
+enum GameMove: String, CaseIterable, Identifiable {
     case rock
     case paper
     case scissors
+
+    var id: String { rawValue }
 }
 
 struct HandIcon: View {
