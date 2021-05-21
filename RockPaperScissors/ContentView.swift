@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var score = 0
+
     var body: some View {
         VStack {
             HStack {
@@ -23,8 +25,7 @@ struct ContentView: View {
                 VStack(spacing: 8) {
                     Text("Your opponent plays:")
                         .font(.headline)
-                    Text("✊")
-                        .accessibilityLabel("rock")
+                    HandIcon(move: .rock)
                         .font(.system(size: 128))
                 }
 
@@ -32,12 +33,21 @@ struct ContentView: View {
                     Text("Your choices:")
                         .font(.headline)
                     HStack(spacing: 8) {
-                        Button("✊") {}
-                            .accessibilityLabel("rock")
-                        Button("🖐") {}
-                            .accessibilityLabel("paper")
-                        Button("✌️") {}
-                            .accessibilityLabel("scissors")
+                        Button(action: {
+                            score += 1
+                        }) {
+                            HandIcon(move: .rock)
+                        }
+                        Button(action: {
+                            score += 1
+                        }) {
+                            HandIcon(move: .paper)
+                        }
+                        Button(action: {
+                            score += 1
+                        }) {
+                            HandIcon(move: .scissors)
+                        }
                     }
                     .font(.system(size: 64))
                 }
@@ -47,12 +57,39 @@ struct ContentView: View {
 
             HStack {
                 Text("Score:")
-                Text("0")
+                Text("\(score)")
                     .fontWeight(.black)
             }
             .font(.largeTitle)
         }
         .padding()
+    }
+}
+
+enum GameMove: String {
+    case rock
+    case paper
+    case scissors
+}
+
+struct HandIcon: View {
+    var move: GameMove
+    @State private var skinTone = Int.random(in: 0 ..< 5)
+
+    var emoji: String {
+        switch move {
+        case .rock:
+            return ["✊🏻", "✊🏼", "✊🏽", "✊🏾", "✊🏿"][skinTone]
+        case .paper:
+            return ["🖐🏻", "🖐🏼", "🖐🏽", "🖐🏾", "🖐🏿"][skinTone]
+        case .scissors:
+            return ["✌🏻", "✌🏼", "✌🏽", "✌🏾", "✌🏿"][skinTone]
+        }
+    }
+
+    var body: some View {
+        Text(emoji)
+            .accessibilityLabel(move.rawValue)
     }
 }
 
