@@ -29,6 +29,7 @@ struct ContentView: View {
                 Text("Objective:")
                 Text(shouldWin ? "Win" : "Lose")
                     .fontWeight(.black)
+                    .foregroundColor(shouldWin ? .green : .red)
             }
             .font(.largeTitle)
 
