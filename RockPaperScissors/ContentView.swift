@@ -9,12 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var score = 0
+    @State private var turn = 0
+
+    @State private var opponentMove = GameMove.allCases.randomElement()!
+    @State private var shouldWin = Bool.random()
+
+    var promptText: String {
+        "Choose the \(shouldWin ? "winning" : "losing") move:"
+    }
 
     var body: some View {
         VStack {
             HStack {
                 Text("Objective:")
-                Text("Win")
+                Text(shouldWin ? "Win" : "Lose")
                     .fontWeight(.black)
             }
             .font(.largeTitle)
@@ -25,12 +33,12 @@ struct ContentView: View {
                 VStack(spacing: 8) {
                     Text("Your opponent plays:")
                         .font(.headline)
-                    HandIcon(move: .rock)
+                    HandIcon(move: opponentMove)
                         .font(.system(size: 128))
                 }
 
                 VStack(spacing: 8) {
-                    Text("Your choices:")
+                    Text(promptText)
                         .font(.headline)
                     HStack(spacing: 8) {
                         Button(action: {
@@ -66,7 +74,7 @@ struct ContentView: View {
     }
 }
 
-enum GameMove: String {
+enum GameMove: String, CaseIterable {
     case rock
     case paper
     case scissors
