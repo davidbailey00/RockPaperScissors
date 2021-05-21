@@ -23,7 +23,7 @@ struct ContentView: View {
         "Choose the \(shouldWin ? "winning" : "losing") move:"
     }
 
-    var body: some View {
+    var gameBody: some View {
         VStack {
             HStack {
                 Text("Objective:")
@@ -79,6 +79,36 @@ struct ContentView: View {
                 }
             )
         })
+    }
+
+    var endBody: some View {
+        VStack(spacing: 32) {
+            VStack {
+                Text("Game Over!")
+                    .fontWeight(.bold)
+                HStack {
+                    Text("You scored:")
+                    Text("\(score)")
+                        .fontWeight(.bold)
+                }
+            }
+
+            Button("Play Again") {
+                nextQuestion()
+                score = 0
+                turn = 0
+            }
+        }
+        .padding()
+        .font(.largeTitle)
+    }
+
+    var body: some View {
+        if turn < 10 {
+            gameBody
+        } else {
+            endBody
+        }
     }
 
     func moveTapped(_ move: GameMove) {
